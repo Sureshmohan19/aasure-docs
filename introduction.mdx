@@ -1,0 +1,66 @@
+---
+title: Introduction
+description: The Aasure API lets you read and write business data programmatically — bookings, customers, invoices, staff, and more.
+---
+
+## Overview
+
+The Aasure API is a REST API that follows familiar conventions: HTTPS, JSON bodies, and HTTP status codes. Every endpoint lives under `https://biz.aasure.app/api/v1`.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="bolt" href="/quickstart">
+    Make your first API call in under 5 minutes.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/authentication">
+    How to authenticate with session cookies or API keys.
+  </Card>
+  <Card title="Error handling" icon="circle-exclamation" href="/errors">
+    Every error follows the same envelope — easy to handle.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/api-keys/list">
+    Full reference with interactive examples.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+```
+https://biz.aasure.app/api/v1
+```
+
+All endpoints require HTTPS. HTTP requests are not accepted.
+
+## Request format
+
+Send `Content-Type: application/json` on any request that has a body (`POST`, `PATCH`, `PUT`). Requests without this header return `415 Unsupported Media Type`.
+
+## Response format
+
+Successful responses return the resource directly — no envelope:
+
+```json
+// Single resource
+{ "id": "inv_abc123", "status": "draft", ... }
+
+// List
+{ "invoices": [...], "next_cursor": null, "has_more": false }
+```
+
+Errors always follow the same shape:
+
+```json
+{
+  "error": {
+    "code": "not_found",
+    "message": "Invoice not found",
+    "request_id": "req_AbCdEf123456",
+    "documentation_url": "https://docs.aasure.app/errors/not_found"
+  }
+}
+```
+
+## Versioning
+
+The current API version is **v1**. The version is part of the URL path — `api/v1` — so you always know exactly which contract you're bound to. Breaking changes increment the version.
+
+The `Aasure-Version` header is available for opt-in previews of upcoming changes. When not set, you get the stable v1 contract.

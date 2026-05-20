@@ -1,0 +1,67 @@
+---
+title: Authentication
+description: The API supports two authentication methods — session cookies (for the dashboard) and API keys (for programmatic access).
+---
+
+## API keys
+
+API keys are the recommended method for any server-to-server or automated integration.
+
+### Key format
+
+```
+aas_live_<24 random characters>   # production
+aas_test_<24 random characters>   # development / staging
+```
+
+### Sending a key
+
+Pass the key as a Bearer token in the `Authorization` header:
+
+```http
+Authorization: Bearer aas_live_AbCdEfGhIjKlMnOpQrStUvWx
+```
+
+### Scopes
+
+Each key is created with one or more scopes that restrict what it can do:
+
+| Scope | Allowed operations |
+|---|---|
+| `read` | All `GET` requests |
+| `write` | `POST` and `PATCH` (create and update) |
+| `admin` | All of the above plus `DELETE` and sensitive operations like revoking API keys |
+
+Request a scope that's too broad? The API returns `403 Forbidden`.
+
+### Key limits
+
+- Maximum **10 active keys** per business.
+- Keys can be set to expire at a specific date, or left with no expiry.
+- Revocation is immediate — the key stops working the moment you revoke it.
+
+### Managing keys
+
+<CardGroup cols={3}>
+  <Card title="List keys" href="/api-reference/api-keys/list" icon="list" />
+  <Card title="Create key" href="/api-reference/api-keys/create" icon="plus" />
+  <Card title="Revoke key" href="/api-reference/api-keys/revoke" icon="trash" />
+</CardGroup>
+
+## Session cookies
+
+Session authentication is used by the Aasure web dashboard. If you're building a server-side integration, use API keys instead. Sessions are scoped to a specific user and cannot be created programmatically.
+
+## Security recommendations
+
+<AccordionGroup>
+  <Accordion title="Rotate keys periodically">
+    Create a new key, update your integration, then revoke the old one. Use `expiresAt` to enforce rotation schedules automatically.
+  </Accordion>
+  <Accordion title="Use the minimum scope">
+    A read-only integration should use a `read`-scoped key. If the key leaks, the blast radius is limited.
+  </Accordion>
+  <Accordion title="Never expose keys client-side">
+    API keys give server-level access. Keep them in environment variables or a secrets manager — never in client-side JavaScript or public repos.
+  </Accordion>
+</AccordionGroup>

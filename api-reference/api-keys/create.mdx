@@ -1,0 +1,8 @@
+---
+title: Create an API key
+openapi: POST /api/v1/businesses/{businessId}/api-keys
+---
+
+<Warning>
+  The full API key token is returned **only once** in the `token` field of the response. Store it immediately in a secrets manager or environment variable. It cannot be retrieved again — only revoked and replaced.
+</Warning>

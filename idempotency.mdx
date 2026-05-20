@@ -1,0 +1,76 @@
+---
+title: Idempotency
+description: Use idempotency keys to safely retry POST, PATCH, and DELETE requests without creating duplicates.
+---
+
+## Overview
+
+Network failures happen. If a `POST /invoices` request times out before you receive a response, you don't know if the invoice was created. Sending the same request again might create a duplicate.
+
+Idempotency keys solve this: send the same `Idempotency-Key` header and the API returns the same response as the original request — without executing the operation again.
+
+## How to use it
+
+Add the `Idempotency-Key` header to any `POST`, `PATCH`, or `DELETE` request:
+
+```http
+POST /api/v1/invoices
+Authorization: Bearer aas_live_...
+Content-Type: application/json
+Idempotency-Key: my-system-invoice-2024-12-01-client-42
+
+{ "businessId": "...", "customerId": "...", ... }
+```
+
+On a retry with the same key, you get back the original `201 Created` response (not a new `201`), and the header:
+
+```http
+Idempotency-Replayed: true
+```
+
+## Key format
+
+Use a value that is:
+- **Unique per operation** — not per endpoint. `create-invoice-for-client-42` works; `create-invoice` does not.
+- **Stable across retries** — generate it before the request and store it until you get a definitive response.
+- **Under 255 characters**
+
+Good choices: UUIDs, a hash of the operation parameters, or a human-readable compound key.
+
+```typescript
+// Using a UUID
+const idempotencyKey = crypto.randomUUID();
+
+// Using a deterministic key
+const idempotencyKey = `invoice-${businessId}-${customerId}-${invoiceMonth}`;
+```
+
+## TTL
+
+Idempotency keys are stored for **24 hours**. After that, the same key on the same endpoint is treated as a fresh request.
+
+## When it applies
+
+| Method | Idempotency supported |
+|---|---|
+| `GET` | N/A — reads are already idempotent |
+| `POST` | Yes |
+| `PATCH` | Yes |
+| `DELETE` | Yes |
+
+The header is ignored on `GET` requests.
+
+## Conflict detection
+
+If you send the same key with a **different request body**, the API returns `409 Conflict`. This protects against accidentally re-using a key for a different operation.
+
+```json
+{
+  "error": {
+    "code": "conflict",
+    "message": "Idempotency key already used with a different request body",
+    "request_id": "req_...",
+    "documentation_url": "https://docs.aasure.app/errors/conflict"
+  }
+}
+```

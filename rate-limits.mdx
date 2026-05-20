@@ -1,0 +1,66 @@
+---
+title: Rate limits
+description: Rate limits protect the API from abuse and ensure fair access. Limits are per business, counted per Cloudflare edge location.
+---
+
+## Limits by operation
+
+| Operation type | Limit | Window |
+|---|---|---|
+| `GET` (reads) | 120 requests | 60 seconds |
+| `POST` / `PATCH` (writes) | 30 requests | 60 seconds |
+| `DELETE` | 10 requests | 60 seconds |
+| Search (`?q=`) | 30 requests | 60 seconds |
+| File uploads | 10 requests | 60 seconds |
+| Exports / bulk reads | 3 requests | 60 seconds |
+
+Session-based (dashboard) requests have a higher anomaly limit of 300 per minute.
+
+<Note>
+  Limits are counted per Cloudflare PoP (point of presence), so actual effective limits are approximate — a globally distributed client may see slightly higher throughput.
+</Note>
+
+## When you hit a limit
+
+The API responds with `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "Too many requests — slow down",
+    "request_id": "req_AbCdEf123456",
+    "documentation_url": "https://docs.aasure.app/errors/rate_limit_exceeded"
+  }
+}
+```
+
+Check the `Retry-After` header for how many seconds to wait before retrying.
+
+## Best practices
+
+<AccordionGroup>
+  <Accordion title="Use bulk endpoints">
+    Prefer batch operations over looping individual requests. For example, listing all invoices in one call rather than fetching each by ID.
+  </Accordion>
+  <Accordion title="Cache reads client-side">
+    Business-level data like services, staff, and schedules rarely changes. Cache it locally and revalidate periodically rather than fetching on every page load.
+  </Accordion>
+  <Accordion title="Implement exponential backoff">
+    On a `429`, wait `Retry-After` seconds, then retry. If you get another `429`, double the wait time. Cap at ~5 minutes.
+
+    ```typescript
+    async function withBackoff(fn: () => Promise<Response>, maxAttempts = 4) {
+      let delay = 1000;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const res = await fn();
+        if (res.status !== 429) return res;
+        const retryAfter = parseInt(res.headers.get('Retry-After') ?? '1');
+        await sleep(Math.max(delay, retryAfter * 1000));
+        delay *= 2;
+      }
+      throw new Error('Rate limit — max retries exceeded');
+    }
+    ```
+  </Accordion>
+</AccordionGroup>

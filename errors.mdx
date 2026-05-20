@@ -1,0 +1,78 @@
+---
+title: Errors
+description: Every error from the Aasure API follows the same envelope, making error handling consistent across all endpoints.
+---
+
+## Error envelope
+
+```json
+{
+  "error": {
+    "code": "not_found",
+    "message": "Invoice not found",
+    "param": "id",
+    "request_id": "req_AbCdEf123456",
+    "documentation_url": "https://docs.aasure.app/errors/not_found"
+  }
+}
+```
+
+| Field | Always present | Description |
+|---|---|---|
+| `code` | Yes | Machine-readable error code — use this for branching logic |
+| `message` | Yes | Human-readable explanation |
+| `param` | No | Which request field caused the error (validation errors) |
+| `request_id` | Yes | Unique ID for this request — include when contacting support |
+| `documentation_url` | Yes | Link to this page |
+
+## HTTP status codes
+
+| Status | Code | When it occurs |
+|---|---|---|
+| `400` | `bad_request` | Missing or invalid request parameters |
+| `400` | `validation_error` | Schema validation failed (invalid type, out-of-range value, etc.) |
+| `401` | `unauthorized` | Missing, invalid, or expired authentication |
+| `403` | `forbidden` | Authenticated but insufficient role or scope |
+| `404` | `not_found` | Resource doesn't exist or doesn't belong to this business |
+| `409` | `conflict` | Attempt to create a duplicate resource |
+| `410` | `gone` | Resource existed but has been permanently deleted |
+| `415` | `unsupported_media_type` | `Content-Type: application/json` missing on a mutation |
+| `429` | `rate_limit_exceeded` | Too many requests — see [Rate limits](/rate-limits) |
+| `500` | `internal_error` | Something went wrong on our end |
+
+## Handling errors
+
+```typescript
+async function callApi(url: string, options?: RequestInit) {
+  const res = await fetch(url, options);
+
+  if (!res.ok) {
+    const { error } = await res.json();
+
+    switch (error.code) {
+      case 'unauthorized':
+        // Prompt re-auth or key rotation
+        break;
+      case 'rate_limit_exceeded':
+        // Respect Retry-After header and back off
+        const retryAfter = res.headers.get('Retry-After') ?? '60';
+        await sleep(parseInt(retryAfter) * 1000);
+        break;
+      case 'not_found':
+        // Resource gone — stop retrying
+        break;
+      default:
+        // Log error.request_id for support
+        console.error(`API error [${error.code}]: ${error.message} (${error.request_id})`);
+    }
+  }
+
+  return res.json();
+}
+```
+
+## Retrying safely
+
+`5xx` errors and network failures are safe to retry. Use [Idempotency-Key](/idempotency) on `POST`/`PATCH`/`DELETE` requests so retries don't create duplicates.
+
+`4xx` errors (except `429`) indicate a problem with the request itself — retrying without fixing the request will produce the same error.

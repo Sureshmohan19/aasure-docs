@@ -1,0 +1,66 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Aasure",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/logo/favicon.svg",
+  "colors": {
+    "primary": "#2E8A52",
+    "light": "#59A87B",
+    "dark": "#1A6338",
+    "anchors": {
+      "from": "#2E8A52",
+      "to": "#1A6338"
+    }
+  },
+  "topbarLinks": [
+    { "name": "Sign in", "url": "https://biz.aasure.app" }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://biz.aasure.app"
+  },
+  "api": {
+    "baseUrl": ["https://biz.aasure.app", "http://localhost:8789"],
+    "auth": {
+      "method": "bearer",
+      "name": "Authorization",
+      "inputPrefix": "aas_live_"
+    }
+  },
+  "openapi": "https://biz.aasure.app/api/v1/openapi.json",
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction", "quickstart"]
+    },
+    {
+      "group": "Concepts",
+      "pages": [
+        "authentication",
+        "errors",
+        "rate-limits",
+        "idempotency",
+        "pagination"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        {
+          "group": "API Keys",
+          "pages": [
+            "api-reference/api-keys/list",
+            "api-reference/api-keys/create",
+            "api-reference/api-keys/revoke"
+          ]
+        }
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://aasure.app"
+  }
+}

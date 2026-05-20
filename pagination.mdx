@@ -1,0 +1,69 @@
+---
+title: Pagination
+description: List endpoints use cursor-based pagination for stable, efficient iteration over large result sets.
+---
+
+## Cursor pagination
+
+List endpoints return a `next_cursor` and `has_more` alongside the results:
+
+```json
+{
+  "invoices": [...],
+  "next_cursor": "inv_abc123",
+  "has_more": true
+}
+```
+
+To get the next page, pass `cursor` as a query parameter:
+
+```http
+GET /api/v1/invoices?businessId=...&cursor=inv_abc123
+```
+
+When `has_more` is `false`, you've reached the end.
+
+## Page size
+
+Most endpoints default to **20 items** per page. Use the `limit` parameter to request up to **100**:
+
+```http
+GET /api/v1/invoices?businessId=...&limit=50
+```
+
+## Iterating all pages
+
+```typescript
+async function* paginate(url: string, apiKey: string) {
+  let cursor: string | null = null;
+
+  while (true) {
+    const endpoint = cursor ? `${url}&cursor=${cursor}` : url;
+    const res = await fetch(endpoint, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    const data = await res.json();
+
+    // Yield the current page's items
+    const resourceKey = Object.keys(data).find((k) => Array.isArray(data[k]));
+    if (resourceKey) yield* data[resourceKey];
+
+    if (!data.has_more) break;
+    cursor = data.next_cursor;
+  }
+}
+
+// Usage
+for await (const invoice of paginate(
+  'https://biz.aasure.app/api/v1/invoices?businessId=YOUR_ID',
+  'aas_live_...'
+)) {
+  console.log(invoice.id);
+}
+```
+
+## Stability
+
+Cursor-based pagination is stable — inserting or deleting records won't cause items to be skipped or duplicated mid-iteration, unlike offset pagination.
+
+Cursors are **opaque strings** — do not parse or construct them manually. They are valid for the lifetime of the underlying record.
