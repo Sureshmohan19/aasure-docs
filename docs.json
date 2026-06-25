@@ -20,7 +20,7 @@
     "url": "https://biz.aasure.app"
   },
   "api": {
-    "baseUrl": ["https://biz.aasure.app", "http://localhost:8789"],
+    "baseUrl": ["https://biz.aasure.app"],
     "auth": {
       "method": "bearer",
       "name": "Authorization",
@@ -29,26 +29,29 @@
   },
   "openapi": "https://biz.aasure.app/api/v1/openapi.json",
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Get Started",
-        "pages": ["introduction", "quickstart"]
-      },
-      {
-        "group": "Concepts",
-        "pages": [
-          "authentication",
-          "errors",
-          "rate-limits",
-          "idempotency",
-          "pagination"
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": ["introduction", "quickstart", "authentication"]
+          },
+          {
+            "group": "Core concepts",
+            "pages": ["errors", "rate-limits", "idempotency", "pagination", "versioning"]
+          },
+          {
+            "group": "Features",
+            "pages": ["features/bookings"]
+          }
         ]
       },
       {
-        "group": "API Reference",
-        "pages": [
+        "tab": "API Reference",
+        "groups": [
           {
-            "group": "API Keys",
+            "group": "API keys",
             "pages": [
               "api-reference/api-keys/list",
               "api-reference/api-keys/create",
