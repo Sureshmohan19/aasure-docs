@@ -1,0 +1,109 @@
+---
+title: Bookings
+description: Bookings are appointments on your calendar — a customer, a service, a time, and a status that moves through a defined lifecycle.
+---
+
+A **booking** ties together a customer, a service (optionally a specific staff member),
+and a time slot. Every booking has a `status` that moves through a fixed lifecycle, and
+the API enforces both tenant isolation and slot conflicts on your behalf.
+
+## Key concepts
+
+| Concept | What it means |
+|---|---|
+| `serviceId` | The service being booked. Determines the duration and whether the booking needs confirmation. |
+| `staffId` | Optional. The assigned staff member. Omit for "any available". |
+| `status` | Lifecycle state — see below. |
+| `source` | Where the booking came from: `online`, `walk_in`, `phone`, or `manual`. |
+
+## Status lifecycle
+
+Bookings follow a strict state machine — invalid transitions return `409`:
+
+| From | Allowed next |
+|---|---|
+| `pending` | `confirmed`, `cancelled` |
+| `confirmed` | `completed`, `no_show`, `cancelled` |
+| `completed` · `cancelled` · `no_show` | _(terminal — no transitions)_ |
+
+A booking starts `pending` when the service requires confirmation, otherwise `confirmed`.
+When you cancel, `cancelledBy` is set by the server from the actor — it is never accepted
+from the request body.
+
+<Note>
+  Conflicts are checked per staff member, honoring the service's `seatsPerTimeSlot`.
+  Overlapping the same staff beyond capacity returns `409`.
+</Note>
+
+## Create a booking
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://biz.aasure.app/api/v1/businesses/YOUR_BUSINESS_ID/bookings \
+  -H "Authorization: Bearer aas_live_YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "serviceId": "svc_...",
+    "customerId": "cus_...",
+    "staffId": "stf_...",
+    "title": "Haircut — Ada Lovelace",
+    "startTime": "2026-07-01T10:00:00Z",
+    "endTime": "2026-07-01T10:30:00Z",
+    "source": "manual"
+  }'
+```
+
+```typescript TypeScript
+const res = await fetch(
+  `https://biz.aasure.app/api/v1/businesses/${businessId}/bookings`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      serviceId, customerId, staffId,
+      title: "Haircut — Ada Lovelace",
+      startTime: "2026-07-01T10:00:00Z",
+      endTime: "2026-07-01T10:30:00Z",
+      source: "manual",
+    }),
+  },
+);
+```
+
+```python Python
+import httpx
+
+httpx.post(
+    f"https://biz.aasure.app/api/v1/businesses/{business_id}/bookings",
+    headers={"Authorization": f"Bearer {api_key}"},
+    json={
+        "serviceId": service_id,
+        "customerId": customer_id,
+        "staffId": staff_id,
+        "title": "Haircut — Ada Lovelace",
+        "startTime": "2026-07-01T10:00:00Z",
+        "endTime": "2026-07-01T10:30:00Z",
+        "source": "manual",
+    },
+)
+```
+</CodeGroup>
+
+<Warning>
+  `customerId`, `staffId`, and `serviceId` must all belong to the same business as the
+  path `businessId`. Cross-tenant references are rejected with `403`.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Errors" icon="circle-exclamation" href="/errors">
+    Conflict and validation error shapes.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/api-keys/list">
+    Full booking endpoints, generated from the spec.
+  </Card>
+</CardGroup>

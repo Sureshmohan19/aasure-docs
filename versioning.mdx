@@ -1,0 +1,61 @@
+---
+title: Versioning
+description: The Aasure API is versioned in the URL path, so you always know exactly which contract you're bound to.
+---
+
+## Current version
+
+The current API version is **v1**. The version is part of every URL:
+
+```
+https://biz.aasure.app/api/v1
+```
+
+Because the version lives in the path, your integration is always pinned to a known
+contract — nothing changes under you without you changing the URL.
+
+## What counts as a breaking change
+
+We only increment the version for changes that could break a well-behaved integration:
+
+- Removing or renaming a field, endpoint, or enum value.
+- Changing a field's type, or making an optional field required.
+- Changing the meaning of an existing field or status code.
+
+The following are **not** breaking and ship within `v1`:
+
+- Adding a new endpoint, optional request field, or response field.
+- Adding a new enum value to a field that already documents that new values may appear.
+- Adding a new error `code` within an existing HTTP status.
+
+<Tip>
+  Write integrations that ignore unknown fields and tolerate new enum values. That way
+  additive changes never require code changes on your side.
+</Tip>
+
+## Previewing upcoming changes
+
+The optional `Aasure-Version` header lets you opt into previews of upcoming changes
+without leaving `v1`:
+
+```http
+Aasure-Version: 2026-07-01
+```
+
+When the header is omitted you always get the stable `v1` contract.
+
+<Note>
+  Preview versions are date-stamped and may change. Don't depend on a preview version in
+  production until it graduates into the stable contract.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Errors" icon="circle-exclamation" href="/errors">
+    The error envelope is stable across the whole `v1` lifetime.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/api-keys/list">
+    Every endpoint, generated from the live spec.
+  </Card>
+</CardGroup>
