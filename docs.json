@@ -27,7 +27,6 @@
       "inputPrefix": "aas_live_"
     }
   },
-  "openapi": "https://biz.aasure.app/api/v1/openapi.json",
   "navigation": {
     "tabs": [
       {
@@ -49,6 +48,7 @@
       },
       {
         "tab": "API Reference",
+        "openapi": "https://biz.aasure.app/api/v1/openapi.json",
         "groups": [
           {
             "group": "API keys",
