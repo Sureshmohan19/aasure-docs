@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "almond",
   "name": "Aasure",
   "logo": {
     "light": "/logo/light.svg",
@@ -8,9 +8,9 @@
   },
   "favicon": "/logo/favicon.svg",
   "colors": {
-    "primary": "#2E8A52",
-    "light": "#59A87B",
-    "dark": "#1A6338"
+    "primary": "#FF7F50",
+    "light": "#FFA07A",
+    "dark": "#D14B2A"
   },
   "topbarLinks": [
     { "name": "Sign in", "url": "https://biz.aasure.app" }
@@ -62,8 +62,11 @@
       },
       {
         "tab": "Changelog",
-        "pages": [
-          "changelog"
+        "groups": [
+          {
+            "group": "2026",
+            "pages": ["changelog/2026-07"]
+          }
         ]
       }
     ]
