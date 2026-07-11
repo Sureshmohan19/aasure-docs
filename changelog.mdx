@@ -1,0 +1,22 @@
+---
+title: "Changelog"
+description: "What shipped in Aasure, newest first — grouped by day and linked to the monorepo PRs."
+---
+
+Internal record of what lands on `main`. One entry per day; each item links to its PR in [aasurecompany](https://github.com/Sureshmohan19/aasurecompany).
+
+<Update label="July 11, 2026" tags={["email","observability","wire"]} description="Email campaigns backend · auth observability">
+  **Email campaigns — the full backend layer.** The campaigns domain now runs end to end below the UI: the wire contract and schema reshape ([#244](https://github.com/Sureshmohan19/aasurecompany/pull/244)), campaign and template CRUD routes under the tenant chokepoint ([#245](https://github.com/Sureshmohan19/aasurecompany/pull/245), [#246](https://github.com/Sureshmohan19/aasurecompany/pull/246)), a pure recipient-resolution engine with an estimate endpoint ([#247](https://github.com/Sureshmohan19/aasurecompany/pull/247)), and the studio data layer for Campaigns \+ Templates ([#250](https://github.com/Sureshmohan19/aasurecompany/pull/250)). The plan of record is in [#242](https://github.com/Sureshmohan19/aasurecompany/pull/242).
+
+  **Auth latency observability.** Segmented request timing across biz routes ([#237](https://github.com/Sureshmohan19/aasurecompany/pull/237)–[#239](https://github.com/Sureshmohan19/aasurecompany/pull/239)), auth API timing propagation ([#248](https://github.com/Sureshmohan19/aasurecompany/pull/248)), session-enrichment timing in the api worker ([#249](https://github.com/Sureshmohan19/aasurecompany/pull/249)), plus a latency probe set and recorded findings ([#251](https://github.com/Sureshmohan19/aasurecompany/pull/251), [#252](https://github.com/Sureshmohan19/aasurecompany/pull/252)).
+
+  **Wire.** Domain event contracts for the durable-event work ([#253](https://github.com/Sureshmohan19/aasurecompany/pull/253)).
+</Update>
+
+<Update label="July 10, 2026" tags={["email","observability","studio"]} description="Audience tab rebuild · shared telemetry">
+  **Audience tab rebuilt.** Manual groups with the list \+ slide-panel layout ([#233](https://github.com/Sureshmohan19/aasurecompany/pull/233)).
+
+  **Telemetry foundation.** A shared telemetry package ([#235](https://github.com/Sureshmohan19/aasurecompany/pull/235)) and the request-observability baseline in biz ([#236](https://github.com/Sureshmohan19/aasurecompany/pull/236)); the architecture write-up is in [#234](https://github.com/Sureshmohan19/aasurecompany/pull/234).
+
+  **Housekeeping.** The legacy editor package is removed ([#231](https://github.com/Sureshmohan19/aasurecompany/pull/231)), agent instructions are split into root \+ per-package files ([#229](https://github.com/Sureshmohan19/aasurecompany/pull/229)), and the durable event architecture is captured ([#232](https://github.com/Sureshmohan19/aasurecompany/pull/232)).
+</Update>
