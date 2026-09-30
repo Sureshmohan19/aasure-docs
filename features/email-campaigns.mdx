@@ -1,0 +1,41 @@
+---
+title: Email campaigns
+description: Prepare, test, schedule, and monitor a campaign from the business dashboard.
+---
+
+Use **Email → Campaigns** to create a campaign. A campaign starts as a draft. You can save it without sending and return to the editor later.
+
+## Prepare the message
+
+In **Design**, add a subject, preview text, and email body. Select **Continue** to save the design and open **Send**.
+
+In **Send**, review the From name and reply-to address. The From email uses Aasure's verified campaign domain. A blank From name or reply-to inherits the values in **Email → Manage**. Your business mailing address appears in the delivered email footer and must be present before sending.
+
+## Choose the audience
+
+Choose **All subscribers** or **Selected groups and segments**. When you select more than one group or segment, each matching subscriber receives the campaign once. Only currently deliverable subscribers are counted. The number shown in the editor is an estimate; subscription status and audience membership are checked again when delivery starts.
+
+If a saved group or segment becomes unavailable, remove it from the selection before sending. After scheduling, you can edit the saved groups or segments, but the choice between all subscribers and a selected audience is fixed for that schedule.
+
+## Send a test
+
+Select **Send test** to email a preview to your signed-in address. A test does not add recipients to the campaign, change its status, or affect campaign metrics. The preview includes the business address and footer; its unsubscribe link is inactive.
+
+## Send now or schedule
+
+**Send now** queues the campaign when the current business-local time is inside the send window in **Email → Manage**. The default window is 08:00–16:00. Once a campaign starts inside the window, delivery continues for its whole audience even if the window closes.
+
+**Schedule for later** accepts a date and time within the next 90 days. The time uses your business timezone and must fall inside its send window. The editor rejects nonexistent or ambiguous local times around daylight-saving changes. Review the recipient estimate and confirm before submitting.
+
+You can edit and reschedule a scheduled campaign while it is still waiting. If your business timezone changes, the editor displays the scheduled instant in the current timezone and calls out the change. You can cancel a scheduled campaign before delivery starts. Once sending has started, cancellation is unavailable and email already accepted by the provider cannot be recalled.
+
+## Monitor delivery
+
+After submission, the campaign may show **Queued** or **Sending**. **Sent** means the provider accepted the campaign's messages; delivery, bounces, complaints, and failures are tracked separately. Open the campaign to see its recipient and delivery counts. A sent campaign is read-only.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Bookings" icon="calendar" href="/features/bookings" />
+  <Card title="Errors" icon="circle-exclamation" href="/errors" />
+</CardGroup>

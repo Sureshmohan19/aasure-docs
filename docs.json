@@ -42,7 +42,7 @@
           },
           {
             "group": "Features",
-            "pages": ["features/bookings"]
+            "pages": ["features/bookings", "features/email-campaigns"]
           }
         ]
       },
