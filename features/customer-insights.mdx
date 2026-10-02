@@ -1,0 +1,42 @@
+---
+title: Customer Insights
+description: Read customer growth, return patterns, health, and recorded booking spend in one report.
+---
+
+Open **Customers → Insights** to see how your customer book is changing and who may need attention. Select a date range for movement and recent appointment measures; the report labels measures that use the full customer history.
+
+## What the numbers mean
+
+| Measure | Definition |
+|---|---|
+| Net customer change | Customers added during the selected period minus customers moved to trash during it. |
+| Second-visit rate | Share of customers with a completed first visit who completed another visit within 90 days. Uses full history. |
+| Forward cover | Upcoming bookings divided by upcoming bookings plus completed appointments in the selected period. |
+| Recorded booking spend | Money manually recorded for bookings in Diary, minus refunds, across full history. Voided sales are excluded. |
+| At-risk customer spend | Historical recorded booking spend of all customers currently in the at-risk health group. This is context for follow-up, not predicted revenue. |
+
+Spend uses the business currency and appears after a paid Diary checkout. The report does not count other booking-linked collections, convert another currency, or infer payment from a service's listed price. A fully refunded checkout contributes zero.
+
+Diary checkout is a manual record of the **full amount** received. Choose **Cash** or **Other**, or save the appointment unpaid and record the full balance later. It does not process cards, take deposits when the customer books, or split a payment across methods.
+
+## Customer health and follow-up
+
+The health map groups customers by recent activity and future bookings. A future booking places a customer in **Booked**. Without one, recent activity places them in **Active**; older activity moves them through **Due now**, **At risk**, and **Lapsed** according to the business's customer settings. Completed visits in the past count toward return measures; cancelled appointments and future visits do not.
+
+**Who is slipping away** lists the highest-spend at-risk customers. Select a name to open that customer's panel. The list shows up to five people, while the at-risk spend total includes the entire at-risk group.
+
+## Read the other sections
+
+- **Return behaviour** shows second visits, repeat visits, rebooking, and recovery after cancelled or missed appointments. Reference markers help you compare rates.
+- **Visit interval drift** compares the latest monthly gap between completed visits with the earlier observed gaps. It waits for real visit intervals instead of inventing a baseline.
+- **Acquisition quality** groups customers by recorded source and shows repeat rate and average recorded booking spend per customer.
+- **Customer cohorts** group customers by the month they were added and show the share with a completed visit at or after 3, 6, and 12 months. A dash means that cohort has not reached the milestone yet.
+- **Data quality** highlights missing birthdays, contact reach, and service prices. Service prices describe potential booking value; recorded spend always comes from checkout.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Bookings" icon="calendar" href="/features/bookings">
+    Understand the appointment lifecycle behind visit measures.
+  </Card>
+</CardGroup>
