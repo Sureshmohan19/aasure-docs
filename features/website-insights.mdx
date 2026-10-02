@@ -1,0 +1,45 @@
+---
+title: Website Insights
+description: Understand visits to your published website, where they came from, and which pages they opened.
+---
+
+Website Insights reports traffic to your Aasure website. Choose **Last 7 days**, **Last 30 days**, or **Last 90 days** from the period selector. Each range ends on the previous completed UTC day because analytics are collected daily.
+
+## What the numbers mean
+
+| Metric | Meaning |
+|---|---|
+| Visits | Entries to your website, including return visits. This is not a count of unique people. |
+| Page views | Website pages loaded during the selected period. |
+| Pages per visit | Page views divided by visits. A dash appears when there are no visits. |
+| Avg. daily visits | Visits divided by days with a collected snapshot in the selected period. |
+
+The chart shows daily visits for the selected range alongside the preceding range of the same length. A comparison appears only when every day in both ranges has a snapshot.
+
+<Note>
+  Cloudflare Web Analytics samples traffic at higher volumes. The displayed counts are estimates, not an audit of individual visitors.
+</Note>
+
+## Collection gaps and zero traffic
+
+A collected day with no traffic appears as **0**. A day without a snapshot is left blank in the chart and excluded from the daily average. The coverage message tells you how many days have snapshots, and the page shows the latest collected day. Before the first snapshot, the page says **No analytics collected yet**.
+
+A missing snapshot does not prove that your site had no visits. Earlier snapshots may also have gaps because the previous pull stored rows only for hosts with traffic.
+
+## Breakdowns
+
+- **Top pages** lists entry-page visits. Page names come from your current site pages; a deleted or unknown page appears by its path.
+- **Where visits come from** groups referrer hosts into Direct, Google, Instagram, Facebook, and Other.
+- **Visits by country** groups visits by the country reported by Cloudflare.
+
+These breakdowns use available snapshots for the selected period. Historical summaries are retained for 400 days.
+
+## Website and booking-page traffic
+
+Your public `/book` page is served separately from your website pages. Website Insights uses the beacon on website HTML. Booking-page requests are stored separately and do not appear as website visits, page views, or booking clicks here. A request for `/book` is not a completed booking.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Bookings" icon="calendar" href="/features/bookings" />
+</CardGroup>
